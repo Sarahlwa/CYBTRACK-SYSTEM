@@ -1,0 +1,2076 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CYBTRACK - Somalia</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --primary: #0ea5e9;
+        --primary-light: #38bdf8;
+        --primary-dark: #0284c7;
+        --accent: #3b82f6;
+        --accent-glow: rgba(59, 130, 246, 0.4);
+        --bg:  #e5eefa;
+        --bg-card: #ffffff;
+        --bg-card-hover: #f8fafc;
+        --bg-section: #f3f8ff;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #64748b;
+        --border: rgba(148, 163, 184, 0.2);
+        --border-hover: rgba(148, 163, 184, 0.4);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+        --gradient-hero: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+        --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(226, 232, 240, 0.5));
+        --glow-primary: 0 0 20px rgba(2, 132, 199, 0.15);
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      [data-theme="dark"] {
+        --primary: #0ea5e9;
+        --primary-light: #38bdf8;
+        --primary-dark: #0284c7;
+        --accent: #3b82f6;
+        --accent-glow: rgba(59, 130, 246, 0.4);
+        --bg: #0a0e1a;
+        --bg-card: #0f172a;
+        --bg-card-hover: #1e293b;
+        --bg-section: #0d1220;
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --text-muted: #64748b;
+        --border: rgba(148, 163, 184, 0.1);
+        --border-hover: rgba(148, 163, 184, 0.2);
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+        --gradient-hero: linear-gradient(135deg, #0a0e1a 0%, #0f172a 50%, #1e3a5f 100%);
+        --gradient-card: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 58, 95, 0.3));
+        --glow-primary: 0 0 20px rgba(14, 165, 233, 0.3);
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: "Noto Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+        background: var(--bg);
+        color: var(--text-primary);
+        line-height: 1.6;
+        transition: var(--transition);
+        overflow-x: hidden;
+        font-size: 18px;
+      }
+      body[dir="rtl"] { font-family: "Noto Sans Arabic", "Noto Sans", sans-serif; }
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: var(--bg); }
+      ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+      .lang-dropdown { position: relative; }
+      .lang-btn {
+        display: flex; align-items: center; gap: 0.5rem;
+        padding: 0.7rem 1rem;
+        border: 1px solid var(--border-hover);
+        border-radius: 10px;
+        background: var(--bg-card);
+        color: var(--text-primary);
+        font-size: 1.25rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .lang-btn:hover { border-color: var(--primary); box-shadow: var(--glow-primary); }
+      .lang-btn .lang-flag { font-size: 1.1rem; }
+      .lang-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        background: var(--bg-card);
+        border: 1px solid var(--border-hover);
+        border-radius: 14px;
+        padding: 0.6rem;
+        min-width: 180px;
+        box-shadow: var(--shadow-lg);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: var(--transition);
+        z-index: 1001;
+      }
+      .lang-dropdown.active .lang-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+      .lang-option {
+        display: flex; align-items: center; gap: 0.75rem;
+        padding: 0.8rem 1rem;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 2rem;
+        color: var(--text-secondary);
+      }
+      .lang-option:hover { background: var(--bg-section); color: var(--text-primary); }
+      .lang-option.active { background: rgba(14, 165, 233, 0.1); color: var(--primary-light); }
+      .lang-option .flag { font-size: 1.2rem; }
+
+      .modal-overlay {
+        position: fixed; inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
+        display: flex; align-items: center; justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+      }
+      .modal-overlay.active { opacity: 1; visibility: visible; }
+      .modal {
+        background: var(--bg-card);
+        border: 1px solid var(--border-hover);
+        border-radius: 24px;
+        padding: 3rem;
+        width: 100%;
+        max-width: 480px;
+        transform: scale(0.9) translateY(20px);
+        transition: var(--transition);
+        position: relative;
+      }
+      .modal-overlay.active .modal { transform: scale(1) translateY(0); }
+      .modal-close {
+        position: absolute;
+        top: 1rem; right: 1rem;
+        width: 36px; height: 36px;
+        border-radius: 50%;
+        border: 1px solid var(--border-hover);
+        background: var(--bg);
+        color: var(--text-secondary);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 1rem;
+      }
+      .modal-close:hover { border-color: #ef4444; color: #ef4444; }
+      .modal-header { text-align: center; margin-bottom: 1.5rem; }
+      .modal-icon {
+        width: 64px; height: 64px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.75rem;
+        color: white;
+        box-shadow: var(--glow-primary);
+      }
+      .modal-title { font-size: 1.8rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem; }
+      .modal-subtitle { font-size: 1.05rem; color: var(--text-secondary); }
+      .form-group { margin-bottom: 1rem; }
+      .form-label { display: block; font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.4rem; }
+      .form-input {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        border: 1px solid var(--border-hover);
+        border-radius: 12px;
+        background: var(--bg);
+        color: var(--text-primary);
+        font-size: 1.05rem;
+        transition: var(--transition);
+      }
+      .form-input:focus { outline: none; border-color: var(--primary); box-shadow: var(--glow-primary); }
+      .form-input::placeholder { color: var(--text-muted); }
+      .form-input-icon { position: relative; }
+      .form-input-icon i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+      .form-input-icon .form-input { padding-left: 2.5rem; }
+      .form-options {
+        display: flex; justify-content: space-between; align-items: center;
+        margin-bottom: 1.25rem;
+        font-size: 0.85rem;
+      }
+      .form-remember { display: flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); }
+      .form-remember input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); }
+      .form-forgot { color: var(--primary-light); text-decoration: none; font-weight: 500; transition: var(--transition); }
+      .form-forgot:hover { text-decoration: underline; }
+      .btn-full { width: 100%; justify-content: center; }
+      .modal-divider { display: flex; align-items: center; gap: 1rem; margin: 1.25rem 0; color: var(--text-muted); font-size: 0.8rem; }
+      .modal-divider::before, .modal-divider::after { content: ""; flex: 1; height: 1px; background: var(--border-hover); }
+      .social-login { display: flex; gap: 0.75rem; }
+      .social-btn {
+        flex: 1; padding: 0.7rem;
+        border: 1px solid var(--border-hover);
+        border-radius: 10px;
+        background: var(--bg);
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex; align-items: center; justify-content: center;
+      }
+      .social-btn:hover { border-color: var(--primary); transform: translateY(-2px); }
+      .modal-footer { text-align: center; margin-top: 1.25rem; font-size: 0.85rem; color: var(--text-secondary); }
+      .modal-footer a { color: var(--primary-light); text-decoration: none; font-weight: 600; }
+
+      .report-modal .modal { max-width: 520px; }
+      .report-type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
+      .report-type-btn {
+        padding: 0.75rem 0.5rem;
+        border: 2px solid var(--border-hover);
+        border-radius: 12px;
+        background: var(--bg);
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .report-type-btn i { font-size: 1.5rem; margin-bottom: 0.25rem; }
+      .report-type-btn:hover { border-color: var(--primary); color: var(--primary-light); }
+      .report-type-btn.active {
+        border-color: var(--primary);
+        background: rgba(14, 165, 233, 0.1);
+        color: var(--primary-light);
+        box-shadow: var(--glow-primary);
+      }
+      .report-type-btn.phishing { color: #ef4444; }
+      .report-type-btn.phishing.active { background: rgba(239, 68, 68, 0.1); border-color: #ef4444; box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); }
+      .report-type-btn.malware { color: #f59e0b; }
+      .report-type-btn.malware.active { background: rgba(245, 158, 11, 0.1); border-color: #f59e0b; box-shadow: 0 0 20px rgba(245, 158, 11, 0.2); }
+      .report-type-btn.data-breach { color: #8b5cf6; }
+      .report-type-btn.data-breach.active { background: rgba(139, 92, 246, 0.1); border-color: #8b5cf6; box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); }
+      .report-type-btn.network { color: #06b6d4; }
+      .report-type-btn.network.active { background: rgba(6, 182, 212, 0.1); border-color: #06b6d4; box-shadow: 0 0 20px rgba(6, 182, 212, 0.2); }
+      .report-type-btn.social { color: #ec4899; }
+      .report-type-btn.social.active { background: rgba(236, 72, 153, 0.1); border-color: #ec4899; box-shadow: 0 0 20px rgba(236, 72, 153, 0.2); }
+      .report-type-btn.other { color: #64748b; }
+      .report-type-btn.other.active { background: rgba(100, 116, 139, 0.1); border-color: #64748b; box-shadow: 0 0 20px rgba(100, 116, 139, 0.2); }
+      .form-textarea {
+        width: 100%; padding: 0.75rem 1rem;
+        border: 1px solid var(--border-hover);
+        border-radius: 10px;
+        background: var(--bg);
+        color: var(--text-primary);
+        font-size: 0.9rem;
+        min-height: 100px;
+        resize: vertical;
+        transition: var(--transition);
+        font-family: inherit;
+      }
+      .form-textarea:focus { outline: none; border-color: var(--primary); box-shadow: var(--glow-primary); }
+      .file-upload {
+        border: 2px dashed var(--border-hover);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+      }
+      .file-upload:hover { border-color: var(--primary); background: rgba(14, 165, 233, 0.05); }
+      .file-upload i { font-size: 2rem; margin-bottom: 0.5rem; display: block; color: var(--primary-light); }
+
+      .navbar {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border);
+        padding: 0.75rem 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: var(--transition);
+      }
+      [data-theme="dark"] .navbar { background: rgba(10, 14, 26, 0.95); }
+      .nav-container {
+        max-width: 100%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 100px;
+        gap: 1.5rem;
+        padding: 0 40px;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        text-decoration: none;
+      }
+      .logo-icon {
+        width: 56px; height: 56px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        border-radius: 14px;
+        display: flex; align-items: center; justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        box-shadow: var(--glow-primary);
+      }
+      .logo-text {
+        font-weight: 700;
+        
+        font-size: 1.15rem;
+        color: var(--text-primary);
+        line-height: 1.2;
+        letter-spacing: 0.5px;
+      }
+      .logo-text small {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--primary);
+        letter-spacing: 1.5px;
+        margin-top: 3px;
+      }
+      .nav-links {
+        display: flex;
+        gap: 4rem;
+        list-style: none;
+        position: relative;
+        align-items: center;
+      }
+      .nav-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 1.75rem;
+        font-weight: 500;
+        transition: var(--transition);
+        position: relative;
+       
+        padding: 0.5rem 0;
+      }
+      .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+      .nav-links a.active::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0; right: 0;
+        height: 2px;
+        background: var(--primary);
+        border-radius: 2px;
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .theme-toggle {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        color: var(--text-secondary);
+        width: 48px; height: 48px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: var(--transition);
+        font-size: 1.2rem;
+      }
+      .theme-toggle:hover { border-color: var(--primary); color: var(--primary); box-shadow: var(--glow-primary); }
+      .btn {
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.15rem;
+        cursor: pointer;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        border: none;
+        text-decoration: none;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: white;
+        box-shadow: var(--glow-primary);
+      }
+      .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 30px var(--accent-glow); }
+      .btn-outline {
+        background: transparent;
+        border: 1px solid var(--border-hover);
+        color: var(--text-primary);
+      }
+      .btn-outline:hover { border-color: var(--primary); color: var(--primary-light); background: rgba(14, 165, 233, 0.05); }
+      .btn-danger {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+      }
+      .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(239, 68, 68, 0.4); }
+      .btn-success {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+      }
+      .btn-success:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(16, 185, 129, 0.4); }
+
+      .scroll-to-top {
+        position: fixed;
+        bottom: 30px; right: 30px;
+        width: 56px; height: 56px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.6rem;
+        box-shadow: var(--shadow-lg);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 999;
+      }
+      .scroll-to-top.show { opacity: 1; visibility: visible; }
+      .scroll-to-top:hover { transform: translateY(-5px) scale(1.1); box-shadow: 0 0 30px var(--accent-glow); }
+
+      .hero {
+        min-height: 85vh;
+        display: flex;
+        
+        align-items: center;
+        padding: 140px 0 80px;
+        overflow: hidden;
+        background: linear-gradient(180deg, #e7f0f9 0%, #e5eefa 100%);
+        position: relative;
+      }
+      [data-theme="dark"] .hero { background: linear-gradient(180deg, #0a0e1a 0%, #0f172a 100%); }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(14,165,233,0.08)"/></svg>');
+        background-size: 50px 50px;
+        opacity: 0.5;
+        animation: float 20s linear infinite;
+      }
+      @keyframes float {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-50px); }
+      }
+      .hero-container {
+        width: 100%;
+        margin: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 80px;
+        position: relative;
+        z-index: 1;
+        padding: 0 40px;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.9rem 1.8rem;
+        border: 1px solid var(--primary);
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--primary);
+        margin-bottom: 2.5rem;
+        background: rgba(14, 165, 233, 0.05);
+      }
+      .hero-title {
+        font-size: clamp(3.5rem, 7vw, 6.5rem);
+        line-height: 1.05;
+        font-weight: 790;
+        margin: 0 0 2.5rem 0;
+        color: var(--text-primary);
+      }
+      .hero-title .line-dark {
+        color: #172139;
+        display: block;
+      }
+      [data-theme="dark"] .hero-title .line-dark { color: #f8fafc; }
+      .hero-title .line-blue {
+        color: var(--primary);
+        display: block;
+      }
+      .hero-desc {
+        font-size: 1.5rem;
+        line-height: 1.7;
+        max-width: 700px;
+        color: var(--text-secondary);
+        margin-bottom: 3rem;
+      }
+      .hero-actions {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 3rem;
+      }
+      .hero-visual {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .globe-container {
+        position: relative;
+        width: min(750px, 48vw);
+        height: min(750px, 48vw);
+        position: relative;
+        left: -20%;
+        flex-shrink: 0;
+      }
+      .globe-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 0 40px rgba(14, 165, 233, 0.2));
+        animation: pulse-glow 4s ease-in-out infinite;
+      }
+      @keyframes pulse-glow {
+        0%, 100% { filter: drop-shadow(0 0 40px rgba(14, 165, 233, 0.2)); }
+        50% { filter: drop-shadow(0 0 60px rgba(14, 165, 233, 0.35)); }
+      }
+      .floating-badge {
+        position: absolute;
+        width: 300px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px 22px;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        box-shadow: var(--shadow-lg);
+        backdrop-filter: blur(10px);
+        animation: float-badge 3s ease-in-out infinite;
+      }
+      .floating-badge:nth-child(2) {
+        top: 5%;
+        right: -10px;
+        animation-delay: 0.5s;
+      }
+      .floating-badge:nth-child(3) {
+        top: 38%;
+        left: -40px;
+        animation-delay: 1s;
+      }
+      .floating-badge:nth-child(4) {
+        bottom: 8%;
+        right: 15%;
+        animation-delay: 1.5s;
+      }
+      @keyframes float-badge {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+      .badge-icon {
+        width: 50px; height: 50px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+      }
+      .badge-icon.blue { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
+      .badge-icon.cyan { background: rgba(14, 165, 233, 0.12); color: #0ea5e9; }
+      .badge-icon.purple { background: rgba(139, 92, 246, 0.12); color: #8b5cf6; }
+      .badge-text { font-size: 0.9rem; }
+      .badge-text strong { display: block; font-size: 1.05rem; color: var(--text-primary); font-weight: 700; }
+      .badge-text span { color: var(--text-muted); font-size: 0.85rem; }
+
+      .hero-services-row {
+        display: flex;
+        align-items: center;
+        gap: 10rem;
+        margin-top: 3rem;
+        padding-top: 2.5rem;
+        border-top: 1px solid var(--border);
+      }
+      .hero-service-item {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .hero-service-icon {
+        width: 50px; height: 50px;
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2rem;
+      }
+      .hero-service-icon.blue { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
+      .hero-service-icon.purple { background: rgba(139, 92, 246, 0.12); color: #8b5cf6; }
+      .hero-service-icon.green { background: rgba(16, 185, 129, 0.12); color: #10b981; }
+      .hero-service-text strong { display: block; font-size: 1rem; color: var(--text-primary); font-weight: 700; }
+      .hero-service-text span { font-size: 1.25rem; color: var(--text-muted); }
+
+      .hero-stats-bar {
+        background: var(--bg-card);
+        border-radius: 0;
+        padding: 3rem 40px;
+        margin: 50px;
+        height: 250px;
+        /* max-width: 100%; */
+        /* width: 100%; */
+       
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+        /* box-shadow: var(--shadow-lg); */
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        border-left: none;
+        border-right: none;
+        position: relative;
+        top: -110px;
+        z-index: 10;
+      }
+      .hero-stat-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.5rem;
+      }
+      .hero-stat-item:not(:last-child) { border-right: 1px solid var(--border); }
+      .hero-stat-icon {
+        width: 90px; height: 90px;
+        border-radius: 50px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2rem;
+        flex-shrink: 0;
+      }
+      .hero-stat-icon.blue { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
+      .hero-stat-icon.green { background: rgba(16, 185, 129, 0.12); color: #10b981; }
+      .hero-stat-icon.purple { background: rgba(139, 92, 246, 0.12); color: #8b5cf6; }
+      .hero-stat-icon.orange { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+      .hero-stat-value {
+        font-size: 2.6rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        line-height: 1;
+      }
+      .hero-stat-value.blue { color: #3b82f6; }
+      .hero-stat-value.green { color: #10b981; }
+      .hero-stat-value.purple { color: #8b5cf6; }
+      .hero-stat-value.orange { color: #f59e0b; }
+      .hero-stat-label {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        margin-top: 0.4rem;
+        font-weight: 500;
+      }
+      .hero-stat-sublabel {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+      }
+
+      .services {
+        padding: 120px 40px 100px;
+        background: var(--bg-section);
+      }
+      .container { max-width: 100%; margin: 0 auto; padding: 0 30px; }
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+      }
+      .service-card {
+        background: var(--gradient-card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 2.5rem;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+      }
+      .service-card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        transform: scaleX(0);
+        transition: var(--transition);
+      }
+      .service-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary);
+        box-shadow: var(--shadow-lg), var(--glow-primary);
+      }
+      .service-card:hover::before { transform: scaleX(1); }
+      .service-icon {
+        width: 75px; height: 75px;
+        border-radius: 14px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+        background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(59, 130, 246, 0.15));
+        color: var(--primary-light);
+        box-shadow: 0 0 20px rgba(14, 165, 233, 0.1);
+        
+      }
+      .service-title { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary); }
+      .service-desc { font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6; }
+      .service-link {
+        color: var(--primary-light);
+        text-decoration: none;
+        font-size: 1.5rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+      }
+      .service-link:hover { gap: 0.75rem; }
+
+      .stats {
+        padding: 80px 40px;
+        background: var(--bg);
+       
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        height: 200px;
+        gap: 2rem;
+        /* max-width: 100%; */
+        margin: 0 auto;
+        padding: 0 30px;
+      }
+      .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        padding: 2rem;
+        background: var(--bg-card);
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        transition: var(--transition);
+      }
+      .stat-item:hover { border-color: var(--primary); box-shadow: var(--glow-primary); }
+      .stat-icon {
+        width: 75px; height: 75px;
+        border-radius: 50px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2rem;
+        background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(59, 130, 246, 0.15));
+        color: var(--primary-light);
+      }
+      .stat-value { font-size: 2.2rem; font-weight: 800; color: var(--text-primary); line-height: 1; }
+      .stat-label { font-size: 1rem; color: var(--text-secondary); margin-top: 0.25rem; }
+
+      .mission {
+        padding: 100px 40px;
+        background: var(--bg-section);
+      }
+      .mission-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        height: 700px;
+        gap: 4rem;
+        align-items: center;
+        /* max-width: 100%; */
+        margin: 0 auto;
+        padding: 0 30px;
+      }
+      .mission-content {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 3.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .mission-content::before {
+        content: "";
+        position: absolute;
+        top: -50%; right: -50%;
+        width: 200px; height:500px;
+        background: radial-gradient(circle, rgba(14, 165, 233, 0.05), transparent);
+      }
+      .mission-label {
+        font-size: 2rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--primary);
+        margin-bottom: 1rem;
+      }
+      .mission-text {
+        font-size: 1.75rem;
+        line-height: 1.7;
+        color: var(--text-secondary);
+        margin-bottom: 2.5rem;
+      }
+      .mission-image {
+        position: relative;
+        bottom: -190px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+      }
+      .mission-image img {
+        width: 100%;
+        height: 700px;
+        object-fit: cover;
+        transition: var(--transition);
+      }
+      .mission-image:hover img { transform: scale(1.05); }
+      .mission-image::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), transparent);
+      }
+      .mission-points {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .mission-points li {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 2rem;
+        color: var(--text-secondary);
+      }
+      .mission-points i { color: var(--primary); font-size: 1rem; }
+
+      .news {
+        padding: 100px 40px;
+        background: var(--bg);
+      }
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2.5rem;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0 30px;
+      }
+      .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .view-all {
+        color: var(--primary-light);
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+      }
+      .view-all:hover { gap: 0.75rem; }
+      .news-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 0 30px;
+      }
+      .news-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: var(--transition);
+      }
+      .news-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--primary);
+        box-shadow: var(--shadow-lg);
+      }
+      .news-image {
+        position: relative;
+        height: 360px;
+        overflow: hidden;
+      }
+      .news-image img {
+        width: 100%;
+        /* height: 100%; */
+        object-fit: cover;
+        transition: var(--transition);
+      }
+      .news-card:hover .news-image img { transform: scale(1.1); }
+      .news-tag {
+        position: absolute;
+        top: 1rem; left: 1rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .news-tag.news { background: rgba(59, 130, 246, 0.9); color: white; }
+      .news-tag.alert { background: rgba(239, 68, 68, 0.9); color: white; }
+      .news-tag.resource { background: rgba(16, 185, 129, 0.9); color: white; }
+      .news-content { padding: 2rem; }
+      .news-date { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+      .news-title { font-size: 1.3rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.75rem; line-height: 1.4; }
+      .news-desc { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.6; }
+      .news-link {
+        color: var(--primary-light);
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+      }
+      .news-link:hover { gap: 0.75rem; }
+
+      .newsletter {
+        padding: 80px 40px;
+        background: var(--bg-section);
+        border-top: 1px solid var(--border);
+      }
+      .newsletter-container {
+        max-width: 100%;
+        height: 175px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 3rem 40px;
+      }
+      .newsletter-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .newsletter-icon {
+        width: 75px; height: 75px;
+        border-radius: 50px;
+        background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(59, 130, 246, 0.15));
+        display: flex; align-items: center; justify-content: center;
+        color: var(--primary-light);
+        font-size: 2rem;
+      }
+      .newsletter-text h3 { font-size: 1.3rem; color: var(--text-primary); margin-bottom: 0.25rem; }
+      .newsletter-text p { font-size: 1.22rem; color: var(--text-secondary); }
+      .newsletter-form { display: flex; gap: 0.75rem; }
+      .newsletter-input {
+        padding: 1rem 1.5rem;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--bg);
+        color: var(--text-primary);
+        font-size: 1.05rem;
+        width: 360px;
+        transition: var(--transition);
+      }
+      .newsletter-input:focus { outline: none; border-color: var(--primary); box-shadow: var(--glow-primary); }
+      .newsletter-input::placeholder { color: var(--text-muted); }
+
+      .footer {
+        padding: 80px 40px 40px;
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+        gap: 3rem;
+        max-width: 100%;
+        margin: 0 auto 3rem;
+        padding: 0 30px;
+      }
+      .footer-brand { max-width: 300px; }
+      .footer-brand .logo { margin-bottom: 1rem; }
+      .footer-brand p { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem; }
+      .social-links { display: flex; gap: 0.75rem; }
+      .social-links a {
+        width: 44px; height: 44px;
+        border-radius: 10px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        display: flex; align-items: center; justify-content: center;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: var(--transition);
+        font-size: 1.1rem;
+      }
+      .social-links a:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); }
+      .footer-column h4 { font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1.25rem; text-transform: uppercase; letter-spacing: 1px; }
+      .footer-links { list-style: none; }
+      .footer-links li { margin-bottom: 0.75rem; }
+      .footer-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 1.05rem;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .footer-links a:hover { color: var(--primary-light); padding-left: 0.25rem; }
+      .contact-info { list-style: none; }
+      .contact-info li {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        color: var(--text-secondary);
+        font-size: 1.05rem;
+      }
+      .contact-info i { color: var(--primary); width: 16px; }
+      .footer-bottom {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 2rem 40px 0;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1rem;
+        color: var(--text-muted);
+      }
+      .footer-bottom a { color: var(--text-muted); text-decoration: none; transition: var(--transition); }
+      .footer-bottom a:hover { color: var(--primary-light); }
+
+      .mobile-menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--text-primary);
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      @media (max-width: 1200px) {
+        .hero-container { flex-direction: column; text-align: center; gap: 3rem; }
+        .hero-desc { margin-left: auto; margin-right: auto; }
+        .hero-actions { justify-content: center; }
+        .hero-visual { order: -1; }
+        .globe-container { width: min(500px, 70vw); height: min(500px, 70vw); }
+        .hero-services-row { justify-content: center; flex-wrap: wrap; }
+        .hero-stats-bar { grid-template-columns: repeat(2, 1fr); }
+        .hero-stat-item:not(:last-child) { border-right: none; }
+        .hero-stat-item:nth-child(odd) { border-right: 1px solid var(--border); }
+        .services-grid { grid-template-columns: repeat(2, 1fr); }
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        .mission-grid { grid-template-columns: 1fr; }
+        .news-grid { grid-template-columns: repeat(2, 1fr); }
+        .footer-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 768px) {
+        .nav-links { display: none; }
+        .mobile-menu-btn { display: block; }
+        .hero { min-height: auto; padding: 100px 1rem 3rem; }
+        .hero-container { gap: 2rem; }
+        .hero-title { font-size: clamp(2rem, 8vw, 2.8rem); }
+        .hero-desc { font-size: 1rem; }
+        .hero-actions { flex-direction: column; align-items: stretch; }
+        .globe-container { width: min(350px, 80vw); height: min(350px, 80vw); }
+        .floating-badge { width: 160px; padding: 10px 12px; }
+        .floating-badge:nth-child(2) { right: -5px; }
+        .floating-badge:nth-child(3) { left: -20px; }
+        .hero-services-row { gap: 1rem; }
+        .hero-stats-bar { grid-template-columns: 1fr; margin-top: -20px; }
+        .hero-stat-item:nth-child(odd) { border-right: none; }
+        .hero-stat-item { border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+        .hero-stat-item:last-child { border-bottom: none; }
+        .services-grid { grid-template-columns: 1fr; }
+        .stats-grid { grid-template-columns: 1fr; }
+        .news-grid { grid-template-columns: 1fr; }
+        .newsletter-container { flex-direction: column; gap: 1.5rem; text-align: center; }
+        .newsletter-form { width: 100%; flex-direction: column; }
+        .newsletter-input { width: 100%; }
+        .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+        .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+        .nav-actions { gap: 0.4rem; }
+        .btn { padding: 0.5rem 0.8rem; font-size: 0.75rem; }
+        .lang-btn { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
+        .report-type-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+
+      .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+      .fade-in.visible { opacity: 1; transform: translateY(0); }
+      #particles-canvas {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+    </style>
+    <base target="_blank" />
+  <base target="_blank">
+</head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="#" class="logo">
+          <div class="logo-icon"><i class="fas fa-shield-alt"></i></div>
+          <div class="logo-text" data-key="logoText">
+            CYBTRACK<br />SECURITY CENTER
+            <!-- <small>SOMALIA</small> -->
+          </div>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#" class="active" data-key="navHome">Home</a></li>
+          <li><a href="#about" data-key="navAbout">About Us</a></li>
+          <li><a href="#services" data-key="navServices">Services</a></li>
+          <li><a href="#resources" data-key="navResources">Resources</a></li>
+          <li><a href="#news" data-key="navNews">News</a></li>
+          <li><a href="#contact" data-key="navContact">Contact</a></li>
+        </ul>
+        <div class="nav-actions">
+          <div class="lang-dropdown" id="langDropdown">
+            <button class="lang-btn" onclick="toggleLangDropdown()">
+              <span class="lang-flag" id="currentLangFlag">&#127482;&#127480;</span>
+              <span id="currentLangText">EN</span>
+              <i class="fas fa-chevron-down" style="font-size: 0.7rem"></i>
+            </button>
+            <div class="lang-menu">
+              <div class="lang-option active" data-lang="en" onclick="changeLanguage('en')">
+                <span class="flag">&#127482;&#127480;</span><span>English</span>
+              </div>
+              <div class="lang-option" data-lang="so" onclick="changeLanguage('so')">
+                <span class="flag">&#127472;&#127476;</span><span>Soomaali</span>
+              </div>
+              <div class="lang-option" data-lang="ar" onclick="changeLanguage('ar')">
+                <span class="flag">&#127480;&#127462;</span><span>&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</span>
+              </div>
+            </div>
+          </div>
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <i class="fas fa-moon"></i>
+          </button>
+          <button class="btn btn-primary" onclick="window.location.href = 'logintest1.html'">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </button>
+          <a href="guess-report.html" class="btn btn-danger" onclick="openModal('reportModal'); return false;">
+            <i class="fas fa-exclamation-circle"></i><span data-key="reportBtn">Report Crime</span>
+          </a>
+        </div>
+        <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <canvas id="particles-canvas"></canvas>
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <i class="fas fa-shield-alt"></i>
+            <span data-key="heroBadge">Securing Somalia's Digital Future</span>
+          </div>
+          <h1 class="hero-title">
+            <span class="line-dark" data-key="heroTitle1">Protecting</span>
+            <span class="line-blue" data-key="heroTitle2">Somalia's </span>
+            <span class="line-blue" data-key="heroTitle3">Digital Future</span>
+          </h1>
+          <p class="hero-desc" data-key="heroDesc">
+            Strengthening cybersecurity, building resilience, and empowering a safer digital nation.
+          </p>
+          <div class="hero-actions">
+            <a href="#" class="btn btn-primary">
+              <i class="fas fa-shield-alt"></i><span data-key="learnMore">Learn More</span>
+            </a>
+            <a href="#" class="btn btn-outline">
+              <i class="fas fa-bell"></i><span data-key="cyberAlerts">Cyber Alerts</span>
+            </a>
+          </div>
+          <div class="hero-services-row">
+            <div class="hero-service-item">
+              <div class="hero-service-icon blue"><i class="fas fa-shield-alt"></i></div>
+              <div class="hero-service-text">
+                <strong data-key="badge2Title">Secure Infrastructure</strong>
+                <span data-key="badge2Sub">Protected systems</span>
+              </div>
+            </div>
+            <div class="hero-service-item">
+              <div class="hero-service-icon purple"><i class="fas fa-cloud"></i></div>
+              <div class="hero-service-text">
+                <strong data-key="badge3Title">Real-time Monitoring</strong>
+                <span data-key="badge3Sub">24/7 surveillance</span>
+              </div>
+            </div>
+            <div class="hero-service-item">
+              <div class="hero-service-icon green"><i class="fas fa-check-circle"></i></div>
+              <div class="hero-service-text">
+                <strong data-key="badge1Title">Threat Detection</strong>
+                <span data-key="badge1Sub">Real-time monitoring</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="globe-container">
+            <img src="map.png" alt="Digital Globe" class="globe-img" />
+            <div class="floating-badge">
+              <div class="badge-icon blue"><i class="fas fa-shield-alt"></i></div>
+              <div class="badge-text">
+                <strong data-key="badge1Title">Threat Detection</strong>
+                <span data-key="badge1Sub">Real-time monitoring</span>
+              </div>
+            </div>
+            <div class="floating-badge">
+              <div class="badge-icon cyan"><i class="fas fa-lock"></i></div>
+              <div class="badge-text">
+                <strong data-key="badge2Title">Secure Infrastructure</strong>
+                <span data-key="badge2Sub">Protected systems</span>
+              </div>
+            </div>
+            <div class="floating-badge">
+              <div class="badge-icon purple"><i class="fas fa-cloud"></i></div>
+              <div class="badge-text">
+                <strong data-key="badge3Title">Real-time Monitoring</strong>
+                <span data-key="badge3Sub">24/7 surveillance</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hero Stats Bar -->
+    <div class="hero-stats-bar">
+      <div class="hero-stat-item">
+        <div class="hero-stat-icon blue"><i class="fas fa-shield-alt"></i></div>
+        <div>
+          <div class="hero-stat-value blue">1,250+</div>
+          <div class="hero-stat-label">Threats Detected</div>
+          <div class="hero-stat-sublabel">This Month</div>
+        </div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="hero-stat-icon green"><i class="fas fa-users"></i></div>
+        <div>
+          <div class="hero-stat-value green">3,580+</div>
+          <div class="hero-stat-label">Incidents Reported</div>
+          <div class="hero-stat-sublabel">This Month</div>
+        </div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="hero-stat-icon purple"><i class="fas fa-file-alt"></i></div>
+        <div>
+          <div class="hero-stat-value purple">2,400+</div>
+          <div class="hero-stat-label">Cases Resolved</div>
+          <div class="hero-stat-sublabel">This Month</div>
+        </div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="hero-stat-icon orange"><i class="fas fa-building"></i></div>
+        <div>
+          <div class="hero-stat-value orange">25+</div>
+          <div class="hero-stat-label">Partner Agencies</div>
+          <div class="hero-stat-sublabel">Working Together</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+      <div class="container">
+        <div class="services-grid">
+          <div class="service-card fade-in">
+            <div class="service-icon"><i class="fas fa-shield-alt" style="color: #0ea5e9"></i></div>
+            <h3 class="service-title" data-key="service1Title">Advanced Protection</h3>
+            <p class="service-desc" data-key="service1Desc">Multi-layered security solutions to protect critical systems and data.</p>
+            <a href="#" class="service-link"><span data-key="learnMoreLink">Learn More</span> <i class="fas fa-arrow-right"></i></a>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon"><i class="fas fa-desktop" style="color: #8b5cf6"></i></div>
+            <h3 class="service-title" data-key="service2Title">24/7 Monitoring</h3>
+            <p class="service-desc" data-key="service2Desc">Continuous monitoring of networks and systems around the clock.</p>
+            <a href="#" class="service-link"><span data-key="learnMoreLink">Learn More</span> <i class="fas fa-arrow-right"></i></a>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon"><i class="fas fa-bolt" style="color: #f59e0b"></i></div>
+            <h3 class="service-title" data-key="service3Title">Rapid Response</h3>
+            <p class="service-desc" data-key="service3Desc">Quick incident response to minimize impact and recover fast.</p>
+            <a href="#" class="service-link"><span data-key="learnMoreLink">Learn More</span> <i class="fas fa-arrow-right"></i></a>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon"><i class="fas fa-user-shield" style="color: #10b981"></i></div>
+            <h3 class="service-title" data-key="service4Title">Cyber Awareness</h3>
+            <p class="service-desc" data-key="service4Desc">Training and awareness programs for a more secure digital community.</p>
+            <a href="#" class="service-link"><span data-key="learnMoreLink">Learn More</span> <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+      <div class="stats-grid">
+        <div class="stat-item fade-in">
+          <div class="stat-icon"><i class="fas fa-users" style="color: #0ea5e9"></i></div>
+          <div>
+            <div class="stat-value">24/7</div>
+            <div class="stat-label" data-key="stat1">Monitoring</div>
+          </div>
+        </div>
+        <div class="stat-item fade-in">
+          <div class="stat-icon"><i class="fas fa-check-circle" style="color: #10b981"></i></div>
+          <div>
+            <div class="stat-value">99.9%</div>
+            <div class="stat-label" data-key="stat2">Threat Detection Rate</div>
+          </div>
+        </div>
+        <div class="stat-item fade-in">
+          <div class="stat-icon"><i class="fas fa-server" style="color: #f59e0b"></i></div>
+          <div>
+            <div class="stat-value">500+</div>
+            <div class="stat-label" data-key="stat3">Protected Networks</div>
+          </div>
+        </div>
+        <div class="stat-item fade-in">
+          <div class="stat-icon"><i class="fas fa-shield-alt" style="color: #ef4444"></i></div>
+          <div>
+            <div class="stat-value">100%</div>
+            <div class="stat-label" data-key="stat4">Secure Infrastructure</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission" id="about">
+      <div class="mission-grid">
+        <div class="mission-content fade-in">
+          <div class="mission-label" data-key="missionLabel">Our Mission</div>
+          <p class="mission-text" data-key="missionText">
+            To protect Somalia's digital infrastructure, enhance cyber resilience, and promote a culture of cybersecurity awareness.
+          </p>
+          <a href="#" class="btn btn-primary"><span data-key="moreAbout">More About Us</span> <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="mission-image fade-in">
+          <img src="https://kimi-web-img.moonshot.cn/img/dsarch.com.au/5b55947f01fdfc380e02bfea263a53696a58d0a6.jpg" alt="National Cyber Security Center Building" />
+        </div>
+        <div class="mission-content fade-in">
+          <ul class="mission-points">
+            <li><i class="fas fa-check-circle"></i><span data-key="point1">National cybersecurity strategy and governance</span></li>
+            <li><i class="fas fa-check-circle"></i><span data-key="point2">Capacity building and skills development</span></li>
+            <li><i class="fas fa-check-circle"></i><span data-key="point3">Public-private partnerships for stronger security</span></li>
+            <li><i class="fas fa-check-circle"></i><span data-key="point4">Innovation and research for emerging threats</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="news" id="news">
+      <div class="section-header">
+        <h2 class="section-title" data-key="newsTitle">Latest News & Resources</h2>
+        <a href="#" class="view-all"><span data-key="viewAll">View All News</span> <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="news-grid">
+        <div class="news-card fade-in">
+          <div class="news-image">
+            <img src="https://kimi-web-img.moonshot.cn/img/www.shutterstock.com/0b9c963fe7bbfe3967b1f49cc6a28e7f0a1a1b1e.jpg" alt="Cyber Awareness Campaign" />
+            <span class="news-tag news">News</span>
+          </div>
+          <div class="news-content">
+            <div class="news-date">May 16, 2024</div>
+            <h3 class="news-title" data-key="news1Title">NCSC Launches National Cyber Awareness Campaign</h3>
+            <p class="news-desc" data-key="news1Desc">A nationwide initiative to educate citizens on staying safe online.</p>
+            <a href="#" class="news-link"><span data-key="readMore">Read More</span> <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="news-card fade-in">
+          <div class="news-image">
+            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #1e3a5f, #0f172a); display: flex; align-items: center; justify-content: center;">
+              <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: #ef4444; opacity: 0.8"></i>
+            </div>
+            <span class="news-tag alert">Alert</span>
+          </div>
+          <div class="news-content">
+            <div class="news-date">May 14, 2024</div>
+            <h3 class="news-title" data-key="news2Title">Critical Vulnerability Detected in Common Software</h3>
+            <p class="news-desc" data-key="news2Desc">Update your systems immediately to avoid potential threats.</p>
+            <a href="#" class="news-link"><span data-key="readMore">Read More</span> <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+        <div class="news-card fade-in">
+          <div class="news-image">
+            <img src="https://kimi-web-img.moonshot.cn/img/static.vecteezy.com/e56e59d9e6663efdd220430449e5acc7976b4d0e.png" alt="Best Practices" />
+            <span class="news-tag resource">Resource</span>
+          </div>
+          <div class="news-content">
+            <div class="news-date">May 10, 2024</div>
+            <h3 class="news-title" data-key="news3Title">Best Practices for Securing Your Organization</h3>
+            <p class="news-desc" data-key="news3Desc">Essential cybersecurity tips for businesses and institutions.</p>
+            <a href="#" class="news-link"><span data-key="readMore">Read More</span> <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter">
+      <div class="newsletter-container">
+        <div class="newsletter-info">
+          <div class="newsletter-icon"><i class="fas fa-envelope"></i></div>
+          <div class="newsletter-text">
+            <h3 data-key="newsletterTitle">Stay Informed, Stay Secure</h3>
+            <p data-key="newsletterDesc">Subscribe to our newsletter for the latest updates and alerts.</p>
+          </div>
+        </div>
+        <form class="newsletter-form" onsubmit="event.preventDefault(); alert(getTranslation('subscribeThanks'));">
+          <input type="email" class="newsletter-input" placeholder="Enter your email address" required />
+          <button type="submit" class="btn btn-primary" data-key="subscribe">Subscribe</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" id="scrollToTopBtn" aria-label="Scroll to top">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <div class="logo-icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="logo-text" data-key="logoText">
+              CYBTRACK<br />SECURITY CENTER
+              <small>SOMALIA</small>
+            </div>
+          </a>
+          <p data-key="footerDesc">Protecting Somalia's digital future through innovation, collaboration, and resilience.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h4 data-key="quickLinks">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="#" data-key="navHome">Home</a></li>
+            <li><a href="#" data-key="navAbout">About Us</a></li>
+            <li><a href="#" data-key="navServices">Services</a></li>
+            <li><a href="#" data-key="navResources">Resources</a></li>
+            <li><a href="#" data-key="navNews">News</a></li>
+            <li><a href="#" data-key="navContact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 data-key="servicesFooter">Services</h4>
+          <ul class="footer-links">
+            <li><a href="#" data-key="footerService1">Threat Detection</a></li>
+            <li><a href="#" data-key="footerService2">Incident Response</a></li>
+            <li><a href="#" data-key="footerService3">Risk Assessment</a></li>
+            <li><a href="#" data-key="footerService4">Security Training</a></li>
+            <li><a href="#" data-key="footerService5">Consulting</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 data-key="resourcesFooter">Resources</h4>
+          <ul class="footer-links">
+            <li><a href="#" data-key="footerResource1">Guides & Reports</a></li>
+            <li><a href="#" data-key="footerResource2">Cyber Alerts</a></li>
+            <li><a href="#" data-key="footerResource3">Tools & Frameworks</a></li>
+            <li><a href="#" data-key="footerResource4">FAQs</a></li>
+            <li><a href="#" data-key="footerResource5">Policy & Compliance</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4 data-key="contactUs">Contact Us</h4>
+          <ul class="contact-info">
+            <li><i class="fas fa-map-marker-alt"></i><span data-key="address">Mogadishu, Somalia</span></li>
+            <li><i class="fas fa-phone"></i> +252 1 234 567</li>
+            <li><i class="fas fa-envelope"></i> info@ncsc.so</li>
+            <li><i class="fas fa-globe"></i> www.ncsc.so</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div data-key="copyright">&copy; 2026 National CYBTRACK Security Center. All rights reserved.</div>
+        <div>
+          <a href="#" data-key="privacy">Privacy Policy</a> |
+          <a href="#" data-key="terms">Terms of Service</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="theme.js"></script>
+    <script>
+      const translations = {
+        en: {
+          loginTitle: "Welcome Back",
+          loginSubtitle: "Sign in to your NCSC account",
+          emailLabel: "Email Address",
+          passwordLabel: "Password",
+          rememberMe: "Remember me",
+          forgotPassword: "Forgot password?",
+          signIn: "Sign In",
+          orContinue: "or continue with",
+          noAccount: "Don't have an account?",
+          signUp: "Sign Up",
+          reportTitle: "Report Cyber Crime",
+          reportSubtitle: "Help us keep Somalia safe online",
+          crimeType: "Type of Incident",
+          phishing: "Phishing",
+          malware: "Malware",
+          dataBreach: "Data Breach",
+          network: "Network",
+          social: "Social Eng.",
+          other: "Other",
+          description: "Description",
+          upload: "Upload Evidence (Optional)",
+          contactEmail: "Your Email (Optional)",
+          submitReport: "Submit Report",
+          logoText: "NATIONAL CYBER\nSECURITY CENTER",
+          navHome: "Home",
+          navAbout: "About Us",
+          navServices: "Services",
+          navResources: "Resources",
+          navNews: "News",
+          navContact: "Contact",
+          loginBtn: "Login",
+          reportBtn: "Report Crime",
+          heroBadge: "Securing Somalia's Digital Future",
+          heroTitle1: "Protecting",
+          heroTitle2: "Somalia's Digital Future",
+          heroTitle3: "Digital Future",
+          heroDesc: "Strengthening cybersecurity, building resilience, and empowering a safer digital nation.",
+          learnMore: "Learn More",
+          cyberAlerts: "Cyber Alerts",
+          badge1Title: "Threat Detection",
+          badge1Sub: "Real-time monitoring",
+          badge2Title: "Secure Infrastructure",
+          badge2Sub: "Protected systems",
+          badge3Title: "Real-time Monitoring",
+          badge3Sub: "24/7 surveillance",
+          service1Title: "Advanced Protection",
+          service1Desc: "Multi-layered security solutions to protect critical systems and data.",
+          service2Title: "24/7 Monitoring",
+          service2Desc: "Continuous monitoring of networks and systems around the clock.",
+          service3Title: "Rapid Response",
+          service3Desc: "Quick incident response to minimize impact and recover fast.",
+          service4Title: "Cyber Awareness",
+          service4Desc: "Training and awareness programs for a more secure digital community.",
+          learnMoreLink: "Learn More",
+          stat1: "Monitoring",
+          stat2: "Threat Detection Rate",
+          stat3: "Protected Networks",
+          stat4: "Secure Infrastructure",
+          missionLabel: "Our Mission",
+          missionText: "To protect Somalia's digital infrastructure, enhance cyber resilience, and promote a culture of cybersecurity awareness.",
+          moreAbout: "More About Us",
+          point1: "National cybersecurity strategy and governance",
+          point2: "Capacity building and skills development",
+          point3: "Public-private partnerships for stronger security",
+          point4: "Innovation and research for emerging threats",
+          newsTitle: "Latest News & Resources",
+          viewAll: "View All News",
+          news1Title: "NCSC Launches National Cyber Awareness Campaign",
+          news1Desc: "A nationwide initiative to educate citizens on staying safe online.",
+          news2Title: "Critical Vulnerability Detected in Common Software",
+          news2Desc: "Update your systems immediately to avoid potential threats.",
+          news3Title: "Best Practices for Securing Your Organization",
+          news3Desc: "Essential cybersecurity tips for businesses and institutions.",
+          readMore: "Read More",
+          newsletterTitle: "Stay Informed, Stay Secure",
+          newsletterDesc: "Subscribe to our newsletter for the latest updates and alerts.",
+          subscribe: "Subscribe",
+          subscribeThanks: "Thank you for subscribing!",
+          footerDesc: "Protecting Somalia's digital future through innovation, collaboration, and resilience.",
+          quickLinks: "Quick Links",
+          servicesFooter: "Services",
+          resourcesFooter: "Resources",
+          contactUs: "Contact Us",
+          footerService1: "Threat Detection",
+          footerService2: "Incident Response",
+          footerService3: "Risk Assessment",
+          footerService4: "Security Training",
+          footerService5: "Consulting",
+          footerResource1: "Guides & Reports",
+          footerResource2: "Cyber Alerts",
+          footerResource3: "Tools & Frameworks",
+          footerResource4: "FAQs",
+          footerResource5: "Policy & Compliance",
+          address: "Mogadishu, Somalia",
+          copyright: "&copy; 2024 National Cyber Security Center. All rights reserved.",
+          privacy: "Privacy Policy",
+          terms: "Terms of Service",
+          loginSuccess: "Login successful! Welcome back.",
+          reportSuccess: "Report submitted successfully! We will investigate and follow up with you.",
+          selectCrimeType: "Please select a crime type before submitting.",
+        },
+        so: {
+          loginTitle: "Soo Dhowow",
+          loginSubtitle: "Soo gal xisaabtaada NCSC",
+          emailLabel: "Cinwaanka Emailka",
+          passwordLabel: "Furaha Sirta",
+          rememberMe: "I xasuusi",
+          forgotPassword: "Ma illowday furaha?",
+          signIn: "Soo Gal",
+          orContinue: "ama ku sii wad",
+          noAccount: "Ma haysatid xisaab?",
+          signUp: "Is Diiwaangeli",
+          reportTitle: "Soo Gudbi Dambiga Cyberka",
+          reportSubtitle: "Igu caawi inaan ilaaliyo Soomaaliya internetka",
+          crimeType: "Nooca Dhacdada",
+          phishing: "Khiyaano (Phishing)",
+          malware: "Cudurka Computerka",
+          dataBreach: "Khasaaraha Xogta",
+          network: "Shabakadda",
+          social: "Khiyaano Bulsho",
+          other: "Kale",
+          description: "Sharaxaad",
+          upload: "Soo Gudbi Caddaynta (Ikhtiyaar)",
+          contactEmail: "Emailkaaga (Ikhtiyaar)",
+          submitReport: "Soo Gudbi Warbixinta",
+          logoText: "XARUNTA QARANKA\nAMNIGA CYBERKA",
+          navHome: "Bogga Hore",
+          navAbout: "Nagu Saabsan",
+          navServices: "Adeegyada",
+          navResources: "Ilaha",
+          navNews: "Wararka",
+          navContact: "Nala Soo Xiriir",
+          loginBtn: "Soo Gal",
+          reportBtn: "Soo Gudbi Dambiga",
+          heroBadge: "Ilaalinta Mustaqbalka Digital-ka Soomaaliya",
+          heroTitle1: "Ilaalinta",
+          heroTitle2: "Mustaqbalka ",
+          heroTitle3: " Digital-ka Soomaaliya",
+          heroDesc: "Xoojinta amniga cyberka, dhisidda xoogga, iyo kobcinta dal digital oo ammaan ah.",
+          learnMore: "Wax Badan Ka Baro",
+          cyberAlerts: "Digniinaha Cyberka",
+          badge1Title: "Ogaanshaha Khataraha",
+          badge1Sub: "La socodka waqti dhab ah",
+          badge2Title: "Dhisidda Amaanka",
+          badge2Sub: "Nidaamyada la ilaaliyo",
+          badge3Title: "La Socodka Waqti Dhab Ah",
+          badge3Sub: "Ilaalinta 24/7",
+          service1Title: "Ilaalinta Sare",
+          service1Desc: "Xalal ammaan oo dabaqarayaal ah si loo ilaaliyo nidaamyada muhiimka ah iyo xogta.",
+          service2Title: "La Socodka 24/7",
+          service2Desc: "La socod joogto ah oo shabakadaha iyo nidaamyada 24 saac ee maalinta.",
+          service3Title: "Jawaab Degdeg Ah",
+          service3Desc: "Jawaab degdeg ah oo dhacdooyinka si loo yareeyo saameynta iyo soo kabasho degdeg ah.",
+          service4Title: "Ogaanshaha Cyberka",
+          service4Desc: "Tababbar iyo barnaamijyo ogaansho si bulsho digital oo ammaan ah.",
+          learnMoreLink: "Wax Badan Ka Baro",
+          stat1: "La Socodka",
+          stat2: "Heerka Ogaanshaha Khataraha",
+          stat3: "Shabakadaha La Ilaaliyo",
+          stat4: "Dhisidda Amaanka",
+          missionLabel: "Ujeeddadeenna",
+          missionText: "Inaan ilaaliyo dhismaha digital-ka Soomaaliya, kobciyo xoogga cyberka, iyo dhiirigelinta dhaqanka ogaanshaha amniga cyberka.",
+          moreAbout: "Wax Badan Nagu Saabsan",
+          point1: "Siyaasadda iyo maamulka amniga cyberka ee qaranka",
+          point2: "Dhisidda awoodda iyo horumarka xirfadaha",
+          point3: "Iskaashiga dowladda iyo ganacsiga si ammaan xooggan",
+          point4: "Hal-abuur iyo cilmi-baarista khataraha cusub",
+          newsTitle: "Wararka & Ilaha Ugu Dambeeya",
+          viewAll: "Eeg Dhammaan Wararka",
+          news1Title: "NCSC Oo Bilaabday Ololaha Ogaanshaha Cyberka Qaranka",
+          news1Desc: "Hawl-wadaag qarameed oo muwaadiniinta u bara sida loo noolaado internetka si ammaan ah.",
+          news2Title: "Naaqis Muhiim Ah Oo Laga Helay Softiweer Caanka Ah",
+          news2Desc: "Cusboonaysii nidaamyadaada si degdeg ah si aad uga hortagto khataraha suurtagalka ah.",
+          news3Title: "Tilmaamo Ugu Fiican Amniga Ururkaaga",
+          news3Desc: "Talooyin muhiim ah oo amniga cyberka ah ee ganacsiyada iyo hay'adaha.",
+          readMore: "Wax Badan Akhri",
+          newsletterTitle: "La Socodka, Amaanka",
+          newsletterDesc: "Is diiwaangeli warqaddeena si aad u hesho cusbooneysiinta ugu dambeeya iyo digniinaha.",
+          subscribe: "Is Diiwaangeli",
+          subscribeThanks: "Mahadsanid is diiwaangelintaada!",
+          footerDesc: "Ilaalinta mustaqbalka digital-ka Soomaaliya iyada oo loo marayo hal-abuur, iskaashiga, iyo xoogga.",
+          quickLinks: "Xiriir Degdeg Ah",
+          servicesFooter: "Adeegyada",
+          resourcesFooter: "Ilaha",
+          contactUs: "Nala Soo Xiriir",
+          footerService1: "Ogaanshaha Khataraha",
+          footerService2: "Jawaabta Dhacdada",
+          footerService3: "Qiimeynta Khataraha",
+          footerService4: "Tababarka Amniga",
+          footerService5: "La-talinta",
+          footerResource1: "Hagayaasha & Warbixinnada",
+          footerResource2: "Digniinaha Cyberka",
+          footerResource3: "Qalabka & Qaab-dhismeedka",
+          footerResource4: "Su'aalaha Badanaa La Isweydiiyo",
+          footerResource5: "Siyaasadda & U Hoggaansanaanta",
+          address: "Muqdisho, Soomaaliya",
+          copyright: "&copy; 2024 Xarunta Qaranka ee Amniga Cyberka. Xuquuqda oo dhan way xifdisan yihiin.",
+          privacy: "Siyaasadda Sirnimada",
+          terms: "Shuruudaha Adeegga",
+          loginSuccess: "Soo gal wanaagsan! Soo dhowow.",
+          reportSuccess: "Warbixinta si guul leh ayaa loo soo gudbiyey! Waxaan baari doonaa oo kula soo xiriiri doonaa.",
+          selectCrimeType: "Fadlan dooro nooca dambiga ka hor intaadan soo gudbin.",
+        },
+        ar: {
+          loginTitle: "مرحباً بعودتك",
+          loginSubtitle: "تسجيل الدخول إلى حساب NCSC",
+          emailLabel: "عنوان البريد الإلكتروني",
+          passwordLabel: "كلمة المرور",
+          rememberMe: "تذكرني",
+          forgotPassword: "نسيت كلمة المرور؟",
+          signIn: "تسجيل الدخول",
+          orContinue: "أو استمر باستخدام",
+          noAccount: "ليس لديك حساب؟",
+          signUp: "إنشاء حساب",
+          reportTitle: "الإبلاغ عن جريمة سيبرانية",
+          reportSubtitle: "ساعدنا في الحفاظ على أمان الصومال عبر الإنترنت",
+          crimeType: "نوع الحادث",
+          phishing: "التصيد الاحتيالي",
+          malware: "البرامج الضارة",
+          dataBreach: "اختراق البيانات",
+          network: "الشبكة",
+          social: "الهندسة الاجتماعية",
+          other: "أخرى",
+          description: "الوصف",
+          upload: "رفع الأدلة (اختياري)",
+          contactEmail: "بريدك الإلكتروني (اختياري)",
+          submitReport: "إرسال البلاغ",
+          logoText: "المركز الوطني\nللأمن السيبراني",
+          navHome: "الرئيسية",
+          navAbout: "من نحن",
+          navServices: "الخدمات",
+          navResources: "الموارد",
+          navNews: "الأخبار",
+          navContact: "اتصل بنا",
+          loginBtn: "تسجيل الدخول",
+          reportBtn: "الإبلاغ عن جريمة",
+          heroBadge: "تأمين مستقبل الصومال الرقمي",
+          heroTitle1: "حماية",
+          heroTitle2: "مستقبل الصومال ي",
+          heroTitle3: " الرقمي",
+          heroDesc: "تعزيز الأمن السيبراني، وبناء المرونة، وتمكين أمة رقمية أكثر أماناً.",
+          learnMore: "معرفة المزيد",
+          cyberAlerts: "تنبيهات الأمن السيبراني",
+          badge1Title: "اكتشاف التهديدات",
+          badge1Sub: "المراقبة في الوقت الفعلي",
+          badge2Title: "البنية التحتية الآمنة",
+          badge2Sub: "أنظمة محمية",
+          badge3Title: "المراقبة في الوقت الفعلي",
+          badge3Sub: "مراقبة على مدار الساعة",
+          service1Title: "الحماية المتقدمة",
+          service1Desc: "حلول أمان متعددة الطبقات لحماية الأنظمة والبيانات الحساسة.",
+          service2Title: "المراقبة على مدار الساعة",
+          service2Desc: "مراقبة مستمرة للشبكات والأنظمة على مدار الساعة.",
+          service3Title: "الاستجابة السريعة",
+          service3Desc: "استجابة سريعة للحوادث لتقليل الأثر والتعافي بسرعة.",
+          service4Title: "الوعي السيبراني",
+          service4Desc: "برامج تدريب وتوعية لمجتمع رقمي أكثر أماناً.",
+          learnMoreLink: "معرفة المزيد",
+          stat1: "المراقبة",
+          stat2: "معدل اكتشاف التهديدات",
+          stat3: "الشبكات المحمية",
+          stat4: "البنية التحتية الآمنة",
+          missionLabel: "مهمتنا",
+          missionText: "حماية البنية التحتية الرقمية للصومال، وتعزيز المرونة السيبرانية، وتعزيز ثقافة الوعي بالأمن السيبراني.",
+          moreAbout: "المزيد عنا",
+          point1: "استراتيجية الأمن السيبراني الوطني والحوكمة",
+          point2: "بناء القدرات وتنمية المهارات",
+          point3: "شراكات القطاعين العام والخاص لأمن أقوى",
+          point4: "الابتكار والبحث للتهديدات الناشئة",
+          newsTitle: "آخر الأخبار والموارد",
+          viewAll: "عرض جميع الأخبار",
+          news1Title: "NCSC يطلق حملة التوعية السيبرانية الوطنية",
+          news1Desc: "مبادرة وطنية لتثقيف المواطنين حول البقاء آمنين عبر الإنترنت.",
+          news2Title: "تم اكتشاف ثغرة أمنية حرجة في برنامج شائع",
+          news2Desc: "قم بتحديث أنظمتك فوراً لتجنب التهديدات المحتملة.",
+          news3Title: "أفضل الممارسات لتأمين مؤسستك",
+          news3Desc: "نصائح أساسية للأمن السيبراني للشركات والمؤسسات.",
+          readMore: "اقرأ المزيد",
+          newsletterTitle: "كن على اطلاع، كن آمناً",
+          newsletterDesc: "اشترك في نشرتنا الإخبارية للحصول على آخر التحديثات والتنبيهات.",
+          subscribe: "اشتراك",
+          subscribeThanks: "شكراً لاشتراكك!",
+          footerDesc: "حماية مستقبل الصومال الرقمي من خلال الابتكار والتعاون والمرونة.",
+          quickLinks: "روابط سريعة",
+          servicesFooter: "الخدمات",
+          resourcesFooter: "الموارد",
+          contactUs: "اتصل بنا",
+          footerService1: "اكتشاف التهديدات",
+          footerService2: "الاستجابة للحوادث",
+          footerService3: "تقييم المخاطر",
+          footerService4: "تدريب الأمن",
+          footerService5: "الاستشارات",
+          footerResource1: "الأدلة والتقارير",
+          footerResource2: "تنبيهات الأمن السيبراني",
+          footerResource3: "الأدوات والأطر",
+          footerResource4: "الأسئلة الشائعة",
+          footerResource5: "السياسات والامتثال",
+          address: "مقديشو، الصومال",
+          copyright: "&copy; 2024 المركز الوطني للأمن السيبراني. جميع الحقوق محفوظة.",
+          privacy: "سياسة الخصوصية",
+          terms: "شروط الخدمة",
+          loginSuccess: "تم تسجيل الدخول بنجاح! أهلاً بعودتك.",
+          reportSuccess: "تم إرسال البلاغ بنجاح! سنحقق ونتواصل معك.",
+          selectCrimeType: "الرجاء اختيار نوع الجريمة قبل الإرسال.",
+        },
+      };
+
+      let currentLang = localStorage.getItem("ncsc-lang") || "en";
+
+      function getTranslation(key) {
+        return translations[currentLang][key] || translations["en"][key] || key;
+      }
+
+      function changeLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem("ncsc-lang", lang);
+
+        const flagMap = {
+          en: "&#127482;&#127480;",
+          so: "&#127472;&#127476;",
+          ar: "&#127480;&#127462;",
+        };
+        const textMap = { en: "EN", so: "SO", ar: "AR" };
+        document.getElementById("currentLangFlag").innerHTML = flagMap[lang];
+        document.getElementById("currentLangText").textContent = textMap[lang];
+
+        document.querySelectorAll(".lang-option").forEach((opt) => {
+          opt.classList.toggle("active", opt.dataset.lang === lang);
+        });
+
+        document.body.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+
+        document.querySelectorAll("[data-key]").forEach((el) => {
+          const key = el.dataset.key;
+          if (translations[lang][key]) {
+            if (key === "logoText") {
+              el.innerHTML = translations[lang][key].replace("\n", "<br>");
+            } else if (key === "copyright") {
+              el.innerHTML = translations[lang][key];
+            } else {
+              el.textContent = translations[lang][key];
+            }
+          }
+        });
+
+        document.getElementById("langDropdown").classList.remove("active");
+      }
+
+      function toggleLangDropdown() {
+        document.getElementById("langDropdown").classList.toggle("active");
+      }
+
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".lang-dropdown")) {
+          document.getElementById("langDropdown").classList.remove("active");
+        }
+      });
+
+      function openModal(id) {
+        document.getElementById(id).classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal(id) {
+        document.getElementById(id).classList.remove("active");
+        document.body.style.overflow = "";
+      }
+
+      document.querySelectorAll(".modal-overlay").forEach((overlay) => {
+        overlay.addEventListener("click", (e) => {
+          if (e.target === overlay) closeModal(overlay.id);
+        });
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          document.querySelectorAll(".modal-overlay.active").forEach((modal) => closeModal(modal.id));
+        }
+      });
+
+      function handleLogin(e) {
+        e.preventDefault();
+        alert(getTranslation("loginSuccess"));
+        closeModal("loginModal");
+      }
+
+      let selectedCrimeType = null;
+      function selectReportType(btn) {
+        document.querySelectorAll(".report-type-btn").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedCrimeType = btn.classList[1];
+      }
+
+      function handleReport(e) {
+        e.preventDefault();
+        if (!selectedCrimeType) {
+          alert(getTranslation("selectCrimeType"));
+          return;
+        }
+        alert(getTranslation("reportSuccess"));
+        closeModal("reportModal");
+        selectedCrimeType = null;
+        document.querySelectorAll(".report-type-btn").forEach((b) => b.classList.remove("active"));
+      }
+
+      const themeToggle = document.getElementById("themeToggle");
+      const html = document.documentElement;
+      const icon = themeToggle.querySelector("i");
+
+      const savedTheme = localStorage.getItem("theme") || "light";
+      html.setAttribute("data-theme", savedTheme);
+      updateIcon(savedTheme);
+
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = html.getAttribute("data-theme");
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
+        html.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+        updateIcon(newTheme);
+      });
+
+      function updateIcon(theme) {
+        icon.className = theme === "dark" ? "fas fa-sun" : "fas fa-moon";
+      }
+
+      const canvas = document.getElementById("particles-canvas");
+      const ctx = canvas.getContext("2d");
+      let particles = [];
+
+      function resizeCanvas() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+      }
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 2 + 0.5;
+          this.speedX = (Math.random() - 0.5) * 0.5;
+          this.speedY = (Math.random() - 0.5) * 0.5;
+          this.opacity = Math.random() * 0.5 + 0.1;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+          if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        }
+        draw() {
+          const isDark = html.getAttribute("data-theme") === "dark";
+          ctx.fillStyle = isDark ? `rgba(14,165,233,${this.opacity})` : `rgba(2,132,199,${this.opacity})`;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      function initParticles() {
+        particles = [];
+        for (let i = 0; i < 50; i++) particles.push(new Particle());
+      }
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p) => {
+          p.update();
+          p.draw();
+        });
+        particles.forEach((a, i) => {
+          particles.slice(i + 1).forEach((b) => {
+            const dx = a.x - b.x, dy = a.y - b.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 100) {
+              const isDark = html.getAttribute("data-theme") === "dark";
+              ctx.strokeStyle = isDark ? `rgba(14,165,233,${0.1 * (1 - distance / 100)})` : `rgba(2,132,199,${0.1 * (1 - distance / 100)})`;
+              ctx.lineWidth = 0.5;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.stroke();
+            }
+          });
+        });
+        requestAnimationFrame(animateParticles);
+      }
+      initParticles();
+      animateParticles();
+
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+      }, observerOptions);
+      document.querySelectorAll(".fade-in").forEach((el) => observer.observe(el));
+
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+
+      let lastScroll = 0;
+      window.addEventListener("scroll", () => {
+        const navbar = document.querySelector(".navbar");
+        const currentScroll = window.pageYOffset;
+        navbar.style.boxShadow = currentScroll > 100 ? "0 4px 20px rgba(0,0,0,0.3)" : "none";
+        lastScroll = currentScroll;
+      });
+
+      function animateCounter(element, target, suffix = "") {
+        let current = 0;
+        const increment = target / 50;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            element.textContent = target + suffix;
+            clearInterval(timer);
+          } else element.textContent = Math.floor(current) + suffix;
+        }, 30);
+      }
+
+      const statsObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.querySelectorAll(".stat-value").forEach((stat) => {
+                const text = stat.textContent;
+                if (text.includes("%")) animateCounter(stat, 99.9, "%");
+                else if (text.includes("+")) animateCounter(stat, 500, "+");
+                else if (text === "100%") animateCounter(stat, 100, "%");
+              });
+              statsObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.5 },
+      );
+
+      if (document.querySelector(".stats-grid"))
+        statsObserver.observe(document.querySelector(".stats-grid"));
+
+      const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+      window.addEventListener("scroll", () => {
+        scrollToTopBtn.classList.toggle("show", window.pageYOffset > 300);
+      });
+      scrollToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    </script>
+  </body>
+</html>
